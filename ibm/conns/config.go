@@ -29,6 +29,7 @@ import (
 	cosconfig "github.com/IBM/ibm-cos-sdk-go-config/resourceconfigurationv1"
 	kp "github.com/IBM/keyprotect-go-client"
 	cisalertsv1 "github.com/IBM/networking-go-sdk/alertsv1"
+	cisoriginpull "github.com/IBM/networking-go-sdk/authenticatedoriginpullapiv1" //rg
 	ciscachev1 "github.com/IBM/networking-go-sdk/cachingapiv1"
 	cisipv1 "github.com/IBM/networking-go-sdk/cisipapiv1"
 	ciscustompagev1 "github.com/IBM/networking-go-sdk/custompagesv1"
@@ -256,6 +257,7 @@ type ClientSession interface {
 	CisWAFGroupClientSession() (*ciswafgroupv1.WafRuleGroupsApiV1, error)
 	CisCacheClientSession() (*ciscachev1.CachingApiV1, error)
 	CisWebhookSession() (*ciswebhooksv1.WebhooksV1, error)
+	CisOrigAuthSession() (*cisoriginauth.AuthenticatedOriginPullApiV1, error) // rg
 	CisCustomPageClientSession() (*ciscustompagev1.CustomPagesV1, error)
 	CisAccessRuleClientSession() (*cisaccessrulev1.ZoneFirewallAccessRulesV1, error)
 	CisUARuleClientSession() (*cisuarulev1.UserAgentBlockingRulesV1, error)
@@ -542,6 +544,10 @@ type clientSession struct {
 	// CIS FirewallRules options
 	cisFirewallRulesClient *cisfirewallrulesv1.FirewallRulesV1
 	cisFirewallRulesErr    error
+
+	// CIS originAuth Pull client option
+	cisOriginAuthClient  *cisoriginpull.AuthenticatedOriginPullApiV // rg
+	cisOriginAuthPullErr error
 
 	//Atracker
 	atrackerClient    *atrackerv1.AtrackerV1
@@ -987,6 +993,14 @@ func (sess clientSession) CisWAFRuleClientSession() (*ciswafrulev1.WafRulesApiV1
 	return sess.cisWAFRuleClient.Clone(), nil
 }
 
+// CIS originAuth pull : rg
+func (sess clientSession) CisOrigAuthSession() (*cisoriginpull.AuthenticatedOriginPullApiV1, error) {
+	if sess.cisOriginAuthPullErr != nil {
+		return sess.cisOriginAuthClient, sess.cisOriginAuthPullErr
+	}
+	return sess.cisOriginAuthClient.Clone(), nil
+}
+
 // IAM Identity Session
 func (sess clientSession) IAMIdentityV1API() (*iamidentity.IamIdentityV1, error) {
 	return sess.iamIdentityAPI, sess.iamIdentityErr
@@ -1182,6 +1196,7 @@ func (c *Config) ClientSession() (interface{}, error) {
 		session.secretsManagerClientErr = errEmptyBluemixCredentials
 		session.cisFiltersErr = errEmptyBluemixCredentials
 		session.cisWebhooksErr = errEmptyBluemixCredentials
+		session.cisOriginAuthPullErr = errEmptyBluemixCredentials
 		session.cisLogpushJobsErr = errEmptyBluemixCredentials
 		session.schematicsClientErr = errEmptyBluemixCredentials
 		session.satelliteClientErr = errEmptyBluemixCredentials
