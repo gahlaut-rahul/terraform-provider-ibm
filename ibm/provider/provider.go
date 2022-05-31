@@ -272,7 +272,7 @@ func Provider() *schema.Provider {
 			"ibm_cis_waf_groups":                    cis.DataSourceIBMCISWAFGroups(),
 			"ibm_cis_alerts":                        cis.DataSourceIBMCISAlert(),
 			"ibm_cis_webhooks":                      cis.DataSourceIBMCISWebhooks(),
-                        "ibm_cis_orig_auth":                   cis.DataSourceIBMCISOriginAuthPull(),  //rg
+			"ibm_cis_orig_auths":                    cis.DataSourceIBMCISOriginAuthPull(), //rg
 			"ibm_cis_logpush_jobs":                  cis.DataSourceIBMCISLogPushJobs(),
 			"ibm_cis_edge_functions_actions":        cis.DataSourceIBMCISEdgeFunctionsActions(),
 			"ibm_cis_edge_functions_triggers":       cis.DataSourceIBMCISEdgeFunctionsTriggers(),
@@ -699,7 +699,7 @@ func Provider() *schema.Provider {
 			"ibm_cis_webhook":                           cis.ResourceIBMCISWebhooks(),
 			"ibm_cis_logpush_job":                       cis.ResourceIBMCISLogPushJob(),
 			"ibm_cis_alert":                             cis.ResourceIBMCISAlert(),
-                        "ibm_cis_orig_auth":                       cis.ResourceIBMCISOriginAuthPull(), // RG
+			"ibm_cis_orig_auth":                         cis.ResourceIBMCISOriginAuthPull(), // RG
 			"ibm_cis_routing":                           cis.ResourceIBMCISRouting(),
 			"ibm_cis_waf_group":                         cis.ResourceIBMCISWAFGroup(),
 			"ibm_cis_cache_settings":                    cis.ResourceIBMCISCacheSettings(),
